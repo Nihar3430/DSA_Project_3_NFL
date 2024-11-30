@@ -66,19 +66,16 @@ class RedBlackTree:
 
     def decision(self, node):
         if node.parent is None:
-            # Case 1: New node is root
             node.color = "black"
             return
 
         if node.parent.color == "black":
-            # Case 2: Parent is black, nothing to do
             return
 
         parent = node.parent
         grandparent = self.get_grandparent(node)
         uncle = self.get_uncle(node)
 
-        # Case 3: Parent and uncle are red
         if uncle and uncle.color == "red":
             parent.color = "black"
             uncle.color = "black"
@@ -86,7 +83,6 @@ class RedBlackTree:
             self.decision(grandparent)
             return
 
-        # Case 4: Parent is red, uncle is black, and node is misaligned
         if node == parent.right and parent == grandparent.left:
             self.rotate_left(parent)
             node = parent
@@ -96,7 +92,6 @@ class RedBlackTree:
             node = parent
             parent = node.parent
 
-        # Case 5: Recolor and rotate to restore balance
         parent.color = "black"
         grandparent.color = "red"
         if node == parent.left:
@@ -113,21 +108,29 @@ class RedBlackTree:
 
         current = self.root
         while True:
-            if gameID < current.value:
+            if gameID < current.gameID:
                 if current.left is None:
                     current.left = new_node
                     new_node.parent = current
                     break
                 current = current.left
-            elif gameID > current.value:
+            elif gameID > current.gameID:
                 if current.right is None:
                     current.right = new_node
                     new_node.parent = current
                     break
                 current = current.right
             else:
-                # Value already exists, skip insertion
-                print(f"Value {gameID} already exists in the tree. Skipping insertion.")
+                # gameID already exists
+                current.first_down += new_node.first_down
+                current.yards += new_node.yards
+                current.rush_attempts += new_node.rush_attempts
+                current.passes += new_node.passes
+                current.incomplete += new_node.incomplete
+                current.touchdown += new_node.touchdown
+                current.sack += new_node.sack
+                current.interception += new_node.interception
+                current.fumble += new_node.fumble
                 return
 
         self.decision(new_node)

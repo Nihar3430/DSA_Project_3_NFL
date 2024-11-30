@@ -134,3 +134,14 @@ class RedBlackTree:
                 return
 
         self.decision(new_node)
+
+    def search(self, gameID):
+        current = self.root
+        while current is not None:
+            if gameID == current.value:
+                return current
+            elif gameID < current.value:
+                current = current.left
+            else:
+                current = current.right
+        return None

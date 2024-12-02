@@ -138,9 +138,9 @@ class RedBlackTree:
     def search(self, gameID):
         current = self.root
         while current is not None:
-            if gameID == current.value:
-                return current
-            elif gameID < current.value:
+            if gameID == current.gameID:
+                return [current.gameID, current.offense, current.defense, current.first_down, current.yards, current.rush_attempts, current.passes, current.incomplete,current.touchdown, current.sack, current.interception, current.fumble]
+            elif gameID < current.gameID:
                 current = current.left
             else:
                 current = current.right

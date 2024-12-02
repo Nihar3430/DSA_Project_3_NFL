@@ -1,16 +1,32 @@
 import pygame
 import sys
 import os
-
-# Initialize Pygame
 pygame.init()
 
-# Get screen dimensions
+"""
+VARIABLES!!!!
+team1Index         # Left Team Index, 0 is Arizona, 1 is Atlanta, etc.
+team2Index         # Right Team Index
+yearIndex          # Data Year Index: 0 is 2021, 1, 2022, 3, 2023
+dataStructureIndex # Which Data Structure: 0 is RB Tree, 1 is Hashmap
+firstDown          # First Downs Variable
+yards              # Yards Variable
+rushAttempts       # Rush Attempts Variable
+passes             # Passes Variable
+incompletions      # Incompletions Variable
+touchdowns         # Touchdowns Variable
+sacks              # Sacks Variable
+interceptions      # Interceptions Variable
+fumbles            # Fumbles Variable
+timeEfficiency     # Time Efficiency Variable
+"""
+
+# Screen Dimensions
 screenInfo = pygame.display.Info()
 screenWidth = screenInfo.current_w
 screenHeight = screenInfo.current_h
 
-# Set the window to fullscreen
+# Fullscreen Window
 screen = pygame.display.set_mode((screenWidth, screenHeight), pygame.RESIZABLE)
 pygame.display.set_caption("NFL Team Comparison")
 
@@ -19,18 +35,20 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
 DARK_GRAY = (100, 100, 100)
+OTHER_GRAY = (180, 180, 180)
 
 # Fonts
-font = pygame.font.Font(None, int(screenHeight * 0.03))  # Font size dynamically based on screen height
+font = pygame.font.Font(None, int(screenHeight * 0.03))  # Font Size Is Dynamic
 
-# Define project base directory and paths
-scriptDir = os.path.dirname(os.path.abspath(__file__))  # Path to the script's directory
-projectRoot = os.path.abspath(os.path.join(scriptDir, os.pardir))  # Go up one level to project root
+# Relative File Directories
+scriptDir = os.path.dirname(os.path.abspath(__file__))  # Script Directory
+projectRoot = os.path.abspath(os.path.join(scriptDir, os.pardir))  # Project Root
 resourcesDir = os.path.join(projectRoot, "resources", "images")
 vsImagePath = os.path.join(resourcesDir, "Street_Fighter_VS_logo.png")
 logosDir = os.path.join(resourcesDir, "NFL Team Logo's")
+backgroundDir = os.path.join(resourcesDir, "Background.png")
 
-# Teams and Options
+# Teams, Year, And Data Structures
 nflTeams = [
     "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
     "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
@@ -44,31 +62,35 @@ nflTeams = [
 years = ["2021", "2022", "2023"]
 dataStructures = ["Red-Black Tree", "Hashmap"]
 
-# Selection indices
+# Selection Indices
+# Left Team Index, 0 Is Arizona, 1 Is Atlanta, Etc.
 team1Index = 0
+# Right Team Index
 team2Index = 1
+# Data Year Index: 0 Is 2021, 1 Is 2022, 2 Is 2023
 yearIndex = 0
+# Which Data Structure: 0 Is R-B Tree, 1 Is Hashmap
 dataStructureIndex = 0
 
-# Adjust vertical spacing
+# Vertical Spacing Adjustment
 verticalSpacing = int(screenHeight * 0.25)
 logoSize = (250, 250)
 
-# Logo dimensions and placement
+# Logo Placement
 logo1Rect = pygame.Rect(int(screenWidth * 0.1), verticalSpacing, *logoSize)
 logo2Rect = pygame.Rect(screenWidth - int(screenWidth * 0.1) - logoSize[0], verticalSpacing, *logoSize)
 
-# Load "VS" image
+# Loading VS Symbol
 vsImage = pygame.image.load(vsImagePath)
 vsImage = pygame.transform.scale(vsImage, (200, 200))  # Scale to 200x200 pixels
 vsRect = vsImage.get_rect()
 vsRect.center = ((logo1Rect.x + logo1Rect.width + logo2Rect.x) // 2, verticalSpacing + logoSize[1] // 2)
 
-# Scroller positions for team names and arrows
+# Scroller Positioning For Team Names
 team1TextPos = (logo1Rect.x + logo1Rect.width // 2, logo1Rect.y - int(screenHeight * 0.1))
 team2TextPos = (logo2Rect.x + logo2Rect.width // 2, logo2Rect.y - int(screenHeight * 0.1))
 
-# Bottom selectors
+# Bottom Scrollers
 bottomOptionSpacing = screenHeight - int(screenHeight * 0.1)
 yearTextPos = (screenWidth * 0.3, bottomOptionSpacing)
 dataStructureTextPos = (screenWidth * 0.7, bottomOptionSpacing)
@@ -80,57 +102,79 @@ rightArrowRect1 = pygame.Rect(team1TextPos[0] + 150, team1TextPos[1] - 25, *arro
 leftArrowRect2 = pygame.Rect(team2TextPos[0] - 200, team2TextPos[1] - 25, *arrowSize)
 rightArrowRect2 = pygame.Rect(team2TextPos[0] + 150, team2TextPos[1] - 25, *arrowSize)
 
-# Year and data structure selectors
-leftArrowYear = pygame.Rect(yearTextPos[0] - 100, bottomOptionSpacing - 20, *arrowSize)
-rightArrowYear = pygame.Rect(yearTextPos[0] + 100, bottomOptionSpacing - 20, *arrowSize)
+# Year And Data Structure Scrollers
+leftArrowYear = pygame.Rect(yearTextPos[0] - 120, bottomOptionSpacing - 20, *arrowSize)
+rightArrowYear = pygame.Rect(yearTextPos[0] + 80, bottomOptionSpacing - 20, *arrowSize)
 leftArrowDS = pygame.Rect(dataStructureTextPos[0] - 200, bottomOptionSpacing - 20, *arrowSize)
-rightArrowDS = pygame.Rect(dataStructureTextPos[0] + 200, bottomOptionSpacing - 20, *arrowSize)
+rightArrowDS = pygame.Rect(dataStructureTextPos[0] + 150, bottomOptionSpacing - 20, *arrowSize)
 
-# Function to load team logo
+# Function That Loads The Teams Logo
 def loadTeamLogo(teamName):
-    """Load the team logo image for the given team."""
-    filename = teamName.replace(" ", "_") + ".png"  # Example: "Arizona Cardinals" -> "Arizona_Cardinals.png"
+    filename = teamName.replace(" ", "_") + ".png"
     path = os.path.join(logosDir, filename)
     try:
         logo = pygame.image.load(path)
         return pygame.transform.scale(logo, logoSize)
     except pygame.error:
-        # If logo not found, return a placeholder
+        # Edge Case If No Logo
         placeholder = pygame.Surface(logoSize)
         placeholder.fill(GRAY)
         return placeholder
 
-# Load default team logos
+# Load Default Logos
 team1Logo = loadTeamLogo(nflTeams[team1Index])
 team2Logo = loadTeamLogo(nflTeams[team2Index])
 
-# Placeholder method for team stats
+# Team Stat Variables
+firstDown = 0
+yards = 0
+rushAttempts = 0
+passes = 0
+incompletions = 0
+touchdowns = 0
+sacks = 0
+interceptions = 0
+fumbles = 0
+
+# Retrieve Team Stats Method
 def getTeamStats(teamName, year):
     return {
-        "First Downs": "20",
-        "Yards": "400",
-        "Rush Attempts": "30",
-        "Passes": "40",
-        "Incompletions": "10",
-        "Touchdowns": "4",
-        "Sacks": "2",
-        "Interceptions": "1",
-        "Fumbles": "1"
+        "First Downs": firstDown,
+        "Yards": yards,
+        "Rush Attempts": rushAttempts,
+        "Passes": passes,
+        "Incompletions": incompletions,
+        "Touchdowns": touchdowns,
+        "Sacks": sacks,
+        "Interceptions": interceptions,
+        "Fumbles": fumbles
     }
 
-# Draw text
-def drawText(text, x, y, color=BLACK, center=True):
-    textSurface = font.render(text, True, color)
+# Draw Text Method
+def drawText(text, x, y, textColor=WHITE, outlineColor=BLACK, center=True):
+    textSurface = font.render(text, True, textColor)
+    outlineSurface = font.render(text, True, outlineColor)
+
     textRect = textSurface.get_rect()
+    outlineRect = outlineSurface.get_rect()
+
     if center:
         textRect.center = (x, y)
+        outlineRect.center = (x, y)
     else:
         textRect.topleft = (x, y)
+        outlineRect.topleft = (x, y)
+
+    # Draw Text Outline
+    offsets = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+    for dx, dy in offsets:
+        screen.blit(outlineSurface, outlineRect.move(dx, dy))
+
+    # Draw Main Text
     screen.blit(textSurface, textRect)
 
-# Draw arrows
-def drawArrow(rect, direction, color=BLACK):
-    """Draw an arrow pointing left or right inside the given rect."""
+# Draw Arrow Method
+def drawArrow(rect, direction, color=WHITE):
     x, y, w, h = rect
     if direction == "left":
         points = [(x + w, y), (x, y + h // 2), (x + w, y + h)]
@@ -138,9 +182,14 @@ def drawArrow(rect, direction, color=BLACK):
         points = [(x, y), (x + w, y + h // 2), (x, y + h)]
     pygame.draw.polygon(screen, color, points)
 
-# Draw method for rendering the menu
+# Time Variable
+timeEfficiency = 0.0
+
+# Draw Menu Method
 def draw():
-    screen.fill(WHITE)
+    backgroundImage = pygame.image.load(backgroundDir)
+    backgroundImage = pygame.transform.scale(backgroundImage, (screenWidth, screenHeight))  # Scale to screen size
+    screen.blit(backgroundImage, (0, 0))
 
     # Team 1 Scroller
     drawArrow(leftArrowRect1, "left")
@@ -152,14 +201,14 @@ def draw():
     drawText(nflTeams[team2Index], team2TextPos[0], team2TextPos[1])
     drawArrow(rightArrowRect2, "right")
 
-    # Draw team logos
+    # Draw Team Logos
     screen.blit(team1Logo, logo1Rect)
     screen.blit(team2Logo, logo2Rect)
 
-    # Draw the "VS" image
+    # Draw The VS Image
     screen.blit(vsImage, vsRect)
 
-    # Team stats
+    # Team Stats
     team1Stats = getTeamStats(nflTeams[team1Index], years[yearIndex])
     team2Stats = getTeamStats(nflTeams[team2Index], years[yearIndex])
 
@@ -174,19 +223,19 @@ def draw():
     for i, (key, value) in enumerate(team2Stats.items()):
         drawText(f"{key}: {value}", logo2Rect.x, statYStart2 + (i + 1) * int(screenHeight * 0.03), center=False)
 
-    # Bottom selectors
+    # Bottom Selectors
     drawArrow(leftArrowYear, "left")
-    drawText(years[yearIndex], yearTextPos[0], bottomOptionSpacing)
+    drawText(years[yearIndex], yearTextPos[0], bottomOptionSpacing, center=True)
     drawArrow(rightArrowYear, "right")
 
     drawArrow(leftArrowDS, "left")
-    drawText(dataStructures[dataStructureIndex], dataStructureTextPos[0], bottomOptionSpacing)
+    drawText(dataStructures[dataStructureIndex], dataStructureTextPos[0], bottomOptionSpacing, center=True)
     drawArrow(rightArrowDS, "right")
 
-    # Time Efficiency
-    drawText(f"Efficiency: {dataStructures[dataStructureIndex]}", timeEfficiencyTextPos[0], timeEfficiencyTextPos[1])
+    # Time Efficiency Text
+    drawText(f"Efficiency: {timeEfficiency}", timeEfficiencyTextPos[0], timeEfficiencyTextPos[1])
 
-# Update method for handling events
+# Event Handler
 def update(event):
     global team1Index, team2Index, yearIndex, dataStructureIndex, team1Logo, team2Logo
 
@@ -196,28 +245,28 @@ def update(event):
             team1Index = (team1Index - 1) % len(nflTeams)
             team1Logo = loadTeamLogo(nflTeams[team1Index])
             if team1Index == team2Index:
-                team2Index = (team2Index + 1) % len(nflTeams)
-                team2Logo = loadTeamLogo(nflTeams[team2Index])
+                team1Index = (team1Index - 1) % len(nflTeams)
+                team1Logo = loadTeamLogo(nflTeams[team1Index])
         elif rightArrowRect1.collidepoint(event.pos):
             team1Index = (team1Index + 1) % len(nflTeams)
             team1Logo = loadTeamLogo(nflTeams[team1Index])
             if team1Index == team2Index:
-                team2Index = (team2Index + 1) % len(nflTeams)
-                team2Logo = loadTeamLogo(nflTeams[team2Index])
+                team1Index = (team1Index + 1) % len(nflTeams)
+                team1Logo = loadTeamLogo(nflTeams[team1Index])
 
         # Team 2 Scroller
         if leftArrowRect2.collidepoint(event.pos):
             team2Index = (team2Index - 1) % len(nflTeams)
             team2Logo = loadTeamLogo(nflTeams[team2Index])
             if team2Index == team1Index:
-                team1Index = (team1Index + 1) % len(nflTeams)
-                team1Logo = loadTeamLogo(nflTeams[team1Index])
+                team2Index = (team2Index - 1) % len(nflTeams)
+                team2Logo = loadTeamLogo(nflTeams[team2Index])
         elif rightArrowRect2.collidepoint(event.pos):
             team2Index = (team2Index + 1) % len(nflTeams)
             team2Logo = loadTeamLogo(nflTeams[team2Index])
             if team2Index == team1Index:
-                team1Index = (team1Index + 1) % len(nflTeams)
-                team1Logo = loadTeamLogo(nflTeams[team1Index])
+                team2Index = (team2Index + 1) % len(nflTeams)
+                team2Logo = loadTeamLogo(nflTeams[team2Index])
 
         # Year Selector
         if leftArrowYear.collidepoint(event.pos):
@@ -231,7 +280,7 @@ def update(event):
         elif rightArrowDS.collidepoint(event.pos):
             dataStructureIndex = (dataStructureIndex + 1) % len(dataStructures)
 
-# Main loop
+# Main Loop
 running = True
 while running:
     for event in pygame.event.get():

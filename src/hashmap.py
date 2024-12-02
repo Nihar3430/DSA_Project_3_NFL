@@ -29,7 +29,7 @@ class HashMap:
     def insert(self, gameID, offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble):
         new_node = self.Pair(gameID, offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble)
         list_key = self.get_hash(gameID)
-        list_value = [gameID, [offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble, gameID]]
+        #list_value = [gameID, [offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble, gameID]]
         bucket = self.hashmap[list_key]
 
         for i in bucket:
@@ -44,7 +44,7 @@ class HashMap:
                 bucket[1][9] += interception
                 bucket[1][10] += fumble
                 return
-        bucket.append(list_value)
+        bucket.append([gameID, [offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble, gameID]])
 
     def search(self, gameID):
         list_key = self.get_hash(gameID)
@@ -53,4 +53,5 @@ class HashMap:
             if i[0] == gameID:
                 return i[1]
         return None
+
 

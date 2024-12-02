@@ -23,7 +23,7 @@ class HashMap:
     def get_hash(self, key):
         hash_num = 0
         key = str(key)
-        print(f"Debug: key = {key}, type = {type(key)}")  # Debug statement
+        #print(f"Debug: key = {key}, type = {type(key)}")  # Debug statement
         for i, j in enumerate(key):
             hash_num += int(ord(j) * (31 ** i))
         return hash_num % self.size
@@ -52,9 +52,9 @@ class HashMap:
         list_key = self.get_hash(gameID)
         #bucket = self.hashmap[list_key]
         for i in self.hashmap[list_key]:
-            if i[0] == gameID:
+            
+            if i[0] == str(gameID):
                 return i[1]
         return None
-
 
 

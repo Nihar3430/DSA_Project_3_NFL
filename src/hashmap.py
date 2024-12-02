@@ -34,15 +34,15 @@ class HashMap:
 
         for i in bucket:
             if i[0] == gameID:
-                bucket[1][2] += first_down
-                bucket[1][3] += yards
-                bucket[1][4] += rush_attempts
-                bucket[1][5] += passes
-                bucket[1][6] += incomplete
-                bucket[1][7] += touchdown
-                bucket[1][8] += sack
-                bucket[1][9] += interception
-                bucket[1][10] += fumble
+                i[1][2] += first_down
+                i[1][3] += yards
+                i[1][4] += rush_attempts
+                i[1][5] += passes
+                i[1][6] += incomplete
+                i[1][7] += touchdown
+                i[1][8] += sack
+                i[1][9] += interception
+                i[1][10] += fumble
                 return
         bucket.append([gameID, [offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble, gameID]])
 
@@ -53,5 +53,6 @@ class HashMap:
             if i[0] == gameID:
                 return i[1]
         return None
+
 
 

@@ -2,7 +2,7 @@ import csv
 
 class Nfldata:
     def __init__(self, game_id, game_date, quarter, offense_team, defense_team, down, to_go, yard_line, season_year, yards, is_rush, is_pass, is_incomplete, is_touchdown, is_sack, is_interception, is_fumble):
-        self.game_id = game_id
+        self.game_id = int(game_id)
         self.game_date = game_date
         self.quarter = int(quarter)
         self.offense_team = offense_team

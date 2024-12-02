@@ -9,16 +9,24 @@ team1Index         # Left Team Index, 0 is Arizona, 1 is Atlanta, etc.
 team2Index         # Right Team Index
 yearIndex          # Data Year Index: 0 is 2021, 1, 2022, 3, 2023
 dataStructureIndex # Which Data Structure: 0 is RB Tree, 1 is Hashmap
-firstDown          # First Downs Variable
-yards              # Yards Variable
-rushAttempts       # Rush Attempts Variable
-passes             # Passes Variable
-incompletions      # Incompletions Variable
-touchdowns         # Touchdowns Variable
-sacks              # Sacks Variable
-interceptions      # Interceptions Variable
-fumbles            # Fumbles Variable
-timeEfficiency     # Time Efficiency Variable
+firstDownT1 = 0
+firstDownT2 = 0
+yardsT1 = 0
+yardsT2 = 0
+rushAttemptsT1 = 0
+rushAttemptsT2 = 0
+passesT1 = 0
+passesT2 = 0
+incompletionsT1 = 0
+incompletionsT2 = 0
+touchdownsT1 = 0
+touchdownsT2 = 0
+sacksT1 = 0
+sacksT2 = 0
+interceptionsT1 = 0
+interceptionsT2 = 0
+fumblesT1 = 0
+fumblesT2 = 0
 """
 
 # Screen Dimensions
@@ -126,28 +134,50 @@ team1Logo = loadTeamLogo(nflTeams[team1Index])
 team2Logo = loadTeamLogo(nflTeams[team2Index])
 
 # Team Stat Variables
-firstDown = 0
-yards = 0
-rushAttempts = 0
-passes = 0
-incompletions = 0
-touchdowns = 0
-sacks = 0
-interceptions = 0
-fumbles = 0
+firstDownT1 = 0
+firstDownT2 = 0
+yardsT1 = 0
+yardsT2 = 0
+rushAttemptsT1 = 0
+rushAttemptsT2 = 0
+passesT1 = 0
+passesT2 = 0
+incompletionsT1 = 0
+incompletionsT2 = 0
+touchdownsT1 = 0
+touchdownsT2 = 0
+sacksT1 = 0
+sacksT2 = 0
+interceptionsT1 = 0
+interceptionsT2 = 0
+fumblesT1 = 0
+fumblesT2 = 0
 
 # Retrieve Team Stats Method
-def getTeamStats(teamName, year):
+def getTeamOneStats(teamName, year):
     return {
-        "First Downs": firstDown,
-        "Yards": yards,
-        "Rush Attempts": rushAttempts,
-        "Passes": passes,
-        "Incompletions": incompletions,
-        "Touchdowns": touchdowns,
-        "Sacks": sacks,
-        "Interceptions": interceptions,
-        "Fumbles": fumbles
+        "First Downs": firstDownT1,
+        "Yards": yardsT1,
+        "Rush Attempts": rushAttemptsT1,
+        "Passes": passesT1,
+        "Incompletions": incompletionsT1,
+        "Touchdowns": touchdownsT1,
+        "Sacks": sacksT1,
+        "Interceptions": interceptionsT1,
+        "Fumbles": fumblesT1
+    }
+
+def getTeamTwoStats(teamName, year):
+    return {
+        "First Downs": firstDownT2,
+        "Yards": yardsT2,
+        "Rush Attempts": rushAttemptsT2,
+        "Passes": passesT2,
+        "Incompletions": incompletionsT2,
+        "Touchdowns": touchdownsT2,
+        "Sacks": sacksT2,
+        "Interceptions": interceptionsT2,
+        "Fumbles": fumblesT2
     }
 
 # Draw Text Method
@@ -209,8 +239,8 @@ def draw():
     screen.blit(vsImage, vsRect)
 
     # Team Stats
-    team1Stats = getTeamStats(nflTeams[team1Index], years[yearIndex])
-    team2Stats = getTeamStats(nflTeams[team2Index], years[yearIndex])
+    team1Stats = getTeamOneStats(nflTeams[team1Index], years[yearIndex])
+    team2Stats = getTeamTwoStats(nflTeams[team2Index], years[yearIndex])
 
     statYStart1 = logo1Rect.y + logoSize[1] + int(screenHeight * 0.03)
     statYStart2 = logo2Rect.y + logoSize[1] + int(screenHeight * 0.03)

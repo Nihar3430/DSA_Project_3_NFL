@@ -47,7 +47,7 @@ favoredTeam = "Favored To Win: Team Name"
 winPercent = "Win %: 60%"
 
 # Function To Write Text
-def writeText(text, xCoor, xCoor, color=BLACK):
+def writeText(text, xCoor, yCoor, color=BLACK):
     textSurface = font.render(text, True, color)
     screen.blit(textSurface, (xCoor, xCoor))
 

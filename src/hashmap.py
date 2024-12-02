@@ -1,3 +1,5 @@
+import time
+
 class HashMap:
     class Pair:
         def __init__(self, gameID_new, offense, defense, first_down_new, yards_new, rush_attempts_new, passes_new, incomplete_new, touchdown_new, sack_new, interception_new, fumble_new):

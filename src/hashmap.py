@@ -23,8 +23,9 @@ class HashMap:
     def get_hash(self, key):
         hash_num = 0
         key = str(key)
+        print(f"Debug: key = {key}, type = {type(key)}")  # Debug statement
         for i, j in enumerate(key):
-            hash_num += int(ord(j) * (31 ** i)) # sum of powers of 31 of ASCII values
+            hash_num += int(ord(j) * (31 ** i))
         return hash_num % self.size
 
     def insert(self, gameID, offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble):

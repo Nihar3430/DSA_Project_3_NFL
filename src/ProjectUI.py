@@ -27,6 +27,7 @@ interceptionsT1 = 0
 interceptionsT2 = 0
 fumblesT1 = 0
 fumblesT2 = 0
+dateEntered        # Stores the date string entered by the user
 """
 
 # Screen Dimensions
@@ -215,6 +216,15 @@ def drawArrow(rect, direction, color=WHITE):
 # Time Variable
 timeEfficiency = 0.0
 
+# Date Input Box
+inputBox = pygame.Rect(screenWidth // 2 - 100, team1TextPos[1], 200, 40)
+colorInactive = GRAY
+colorActive = DARK_GRAY
+color = colorInactive
+active = False
+dateInput = ''
+dateEntered = ''
+
 # Draw Menu Method
 def draw():
     backgroundImage = pygame.image.load(backgroundDir)
@@ -265,9 +275,21 @@ def draw():
     # Time Efficiency Text
     drawText(f"Efficiency: {timeEfficiency}", timeEfficiencyTextPos[0], timeEfficiencyTextPos[1])
 
+    # Draw Date Box Label
+    labelText = "Enter Date (MM/DD/YYYY):"
+    labelSurface = font.render(labelText, True, WHITE)
+    labelRect = labelSurface.get_rect(center=(inputBox.x + inputBox.width // 2, inputBox.y - 30))
+    screen.blit(labelSurface, labelRect)
+
+    # Draw Date Input Box
+    pygame.draw.rect(screen, color, inputBox, 2)
+    txtSurface = font.render(dateInput, True, WHITE)
+    screen.blit(txtSurface, (inputBox.x + 5, inputBox.y + 5))
+    inputBox.w = max(200, txtSurface.get_width() + 10)
+
 # Event Handler
 def update(event):
-    global team1Index, team2Index, yearIndex, dataStructureIndex, team1Logo, team2Logo
+    global team1Index, team2Index, yearIndex, dataStructureIndex, team1Logo, team2Logo, active, dateInput, color
 
     if event.type == pygame.MOUSEBUTTONDOWN:
         # Team 1 Scroller
@@ -309,6 +331,23 @@ def update(event):
             dataStructureIndex = (dataStructureIndex - 1) % len(dataStructures)
         elif rightArrowDS.collidepoint(event.pos):
             dataStructureIndex = (dataStructureIndex + 1) % len(dataStructures)
+
+        # If the user clicks the input box
+        if inputBox.collidepoint(event.pos):
+            active = not active
+        else:
+            active = False
+        color = colorActive if active else colorInactive
+
+    if event.type == pygame.KEYDOWN:
+        if active:
+            if event.key == pygame.K_RETURN:  # Handle Enter key
+                dateEntered = dateInput
+                dateInput = ''
+            elif event.key == pygame.K_BACKSPACE:
+                dateInput = dateInput[:-1]
+            else:
+                dateInput += event.unicode
 
 # Main Loop
 running = True

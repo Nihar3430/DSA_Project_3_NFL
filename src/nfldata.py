@@ -4,7 +4,7 @@ from redBlackTree import RedBlackTree
 from hashmap import HashMap
 
 
-file_path = "../Database/2023_Database.csv"
+file_path = ["../Database/2023_Database.csv", "../Database/2022_Database.csv", "../Database/2021_Database.csv" ]
 
 # Update the GameId based on the offense team
 def update_id(gameID, offense_team):

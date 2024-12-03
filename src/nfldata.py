@@ -4,7 +4,7 @@ from redBlackTree import RedBlackTree
 from hashmap import HashMap
 
 
-file_path = "Database/2023_Database.csv"
+file_path = "../Database/2023_Database.csv"
 
 # Update the GameId based on the offense team
 def update_id(gameID, offense_team):
@@ -77,8 +77,12 @@ def redblackinsert(gameID1, gameID2):
             )
 
         # Search for a specific game ID in the tree
+        start = time.perf_counter()
         mock = tree.search(gameID1)
-        mock2 = tree.seach(gameID2)
+        mock2 = tree.search(gameID2)
+        end = time.perf_counter()
+        elapsed_nano = (end - start) * 1e9
+        print(elapsed_nano)
         return mock, mock2
 
 def hashmapinsert(gameID1, gameID2):
@@ -107,9 +111,13 @@ def hashmapinsert(gameID1, gameID2):
             )
 
         # Search for a specific game ID in the tree
+        start = time.perf_counter()
         mock = map.search(gameID1)
         mock2 = map.search(gameID2)
-        print(mock, mock2)
+        end = time.perf_counter()
+        elapsed_nano = (end - start) * 1e9
+        print(elapsed_nano)
+        return mock, mock2
 
 def dictinsert(off, denf, date):
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
@@ -128,10 +136,14 @@ def dictinsert(off, denf, date):
 
         if search_key in game_data:
             print(game_data[search_key])
+            return game_data[search_key]
         else:
             print("Game ID not found.")
 
 if __name__ == "__main__": 
-    dictinsert("GB", "LA", "11/5/2023")
-
+    k = int(dictinsert("GB", "LA", "11/5/2023"))
+    m = int(dictinsert("LA", "GB", "11/5/2023"))
+    i, j = hashmapinsert(k, m)
+    print(i)
+    print(j)
 

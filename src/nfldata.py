@@ -55,7 +55,6 @@ def redblackinsert(gameID1, gameID2):
     # Read and process the CSV data
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)
-        print("Headers:", reader.fieldnames)
         tree = RedBlackTree()
 
         # Insert rows into the Red-Black Tree
@@ -87,7 +86,6 @@ def redblackinsert(gameID1, gameID2):
 def hashmapinsert(gameID1, gameID2):
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)
-        print("Headers:", reader.fieldnames)
         map = HashMap()
 
         # Insert rows into the Red-Black Tree
@@ -120,7 +118,6 @@ def hashmapinsert(gameID1, gameID2):
 def dictinsert(off, denf, date):
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)
-        print("Headers:", reader.fieldnames)
         game_data = {}
 
         # Insert rows into the dictionary

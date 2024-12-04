@@ -28,6 +28,7 @@ interceptionsT2 = 0
 fumblesT1 = 0
 fumblesT2 = 0
 dateEntered        # Stores the date string entered by the user
+nflTeamsID         # 2 Or 3 Letter Team ID's
 """
 
 # Screen Dimensions
@@ -58,7 +59,7 @@ logosDir = os.path.join(resourcesDir, "NFL Team Logo's")
 backgroundDir = os.path.join(resourcesDir, "Background.png")
 
 # Teams, Year, And Data Structures
-nflTeams = [
+nflTeamsName = [
     "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
     "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
     "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
@@ -67,6 +68,17 @@ nflTeams = [
     "Minnesota Vikings", "New England Patriots", "New Orleans Saints", "New York Giants",
     "New York Jets", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
     "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington Commanders"
+]
+
+nflTeamsID = [
+    "ARI", "ATL", "BAL", "BUF",
+    "CAR", "CHI", "CIN", "CLE",
+    "DAL", "DEN", "DET", "GB",
+    "HOU", "IND", "JAX", "KC",
+    "LV", "LAC", "LA", "MIA",
+    "MIN", "NE", "NO", "NYG",
+    "NYJ", "PHI", "PIT", "SF",
+    "SEA", "TB", "TEN", "WAS"
 ]
 years = ["2021", "2022", "2023"]
 dataStructures = ["Red-Black Tree", "Hashmap"]
@@ -131,8 +143,8 @@ def loadTeamLogo(teamName):
         return placeholder
 
 # Load Default Logos
-team1Logo = loadTeamLogo(nflTeams[team1Index])
-team2Logo = loadTeamLogo(nflTeams[team2Index])
+team1Logo = loadTeamLogo(nflTeamsName[team1Index])
+team2Logo = loadTeamLogo(nflTeamsName[team2Index])
 
 # Team Stat Variables
 firstDownT1 = 0
@@ -233,12 +245,12 @@ def draw():
 
     # Team 1 Scroller
     drawArrow(leftArrowRect1, "left")
-    drawText(nflTeams[team1Index], team1TextPos[0], team1TextPos[1])
+    drawText(nflTeamsName[team1Index], team1TextPos[0], team1TextPos[1])
     drawArrow(rightArrowRect1, "right")
 
     # Team 2 Scroller
     drawArrow(leftArrowRect2, "left")
-    drawText(nflTeams[team2Index], team2TextPos[0], team2TextPos[1])
+    drawText(nflTeamsName[team2Index], team2TextPos[0], team2TextPos[1])
     drawArrow(rightArrowRect2, "right")
 
     # Draw Team Logos
@@ -249,8 +261,8 @@ def draw():
     screen.blit(vsImage, vsRect)
 
     # Team Stats
-    team1Stats = getTeamOneStats(nflTeams[team1Index], years[yearIndex])
-    team2Stats = getTeamTwoStats(nflTeams[team2Index], years[yearIndex])
+    team1Stats = getTeamOneStats(nflTeamsName[team1Index], years[yearIndex])
+    team2Stats = getTeamTwoStats(nflTeamsName[team2Index], years[yearIndex])
 
     statYStart1 = logo1Rect.y + logoSize[1] + int(screenHeight * 0.03)
     statYStart2 = logo2Rect.y + logoSize[1] + int(screenHeight * 0.03)
@@ -276,7 +288,7 @@ def draw():
     drawText(f"Efficiency: {timeEfficiency}", timeEfficiencyTextPos[0], timeEfficiencyTextPos[1])
 
     # Draw Date Box Label
-    labelText = "Enter Date (MM/DD/YYYY):"
+    labelText = "Enter Date M/D/Y:"
     labelSurface = font.render(labelText, True, WHITE)
     labelRect = labelSurface.get_rect(center=(inputBox.x + inputBox.width // 2, inputBox.y - 30))
     screen.blit(labelSurface, labelRect)
@@ -294,31 +306,31 @@ def update(event):
     if event.type == pygame.MOUSEBUTTONDOWN:
         # Team 1 Scroller
         if leftArrowRect1.collidepoint(event.pos):
-            team1Index = (team1Index - 1) % len(nflTeams)
-            team1Logo = loadTeamLogo(nflTeams[team1Index])
+            team1Index = (team1Index - 1) % len(nflTeamsName)
+            team1Logo = loadTeamLogo(nflTeamsName[team1Index])
             if team1Index == team2Index:
-                team1Index = (team1Index - 1) % len(nflTeams)
-                team1Logo = loadTeamLogo(nflTeams[team1Index])
+                team1Index = (team1Index - 1) % len(nflTeamsName)
+                team1Logo = loadTeamLogo(nflTeamsName[team1Index])
         elif rightArrowRect1.collidepoint(event.pos):
-            team1Index = (team1Index + 1) % len(nflTeams)
-            team1Logo = loadTeamLogo(nflTeams[team1Index])
+            team1Index = (team1Index + 1) % len(nflTeamsName)
+            team1Logo = loadTeamLogo(nflTeamsName[team1Index])
             if team1Index == team2Index:
-                team1Index = (team1Index + 1) % len(nflTeams)
-                team1Logo = loadTeamLogo(nflTeams[team1Index])
+                team1Index = (team1Index + 1) % len(nflTeamsName)
+                team1Logo = loadTeamLogo(nflTeamsName[team1Index])
 
         # Team 2 Scroller
         if leftArrowRect2.collidepoint(event.pos):
-            team2Index = (team2Index - 1) % len(nflTeams)
-            team2Logo = loadTeamLogo(nflTeams[team2Index])
+            team2Index = (team2Index - 1) % len(nflTeamsName)
+            team2Logo = loadTeamLogo(nflTeamsName[team2Index])
             if team2Index == team1Index:
-                team2Index = (team2Index - 1) % len(nflTeams)
-                team2Logo = loadTeamLogo(nflTeams[team2Index])
+                team2Index = (team2Index - 1) % len(nflTeamsName)
+                team2Logo = loadTeamLogo(nflTeamsName[team2Index])
         elif rightArrowRect2.collidepoint(event.pos):
-            team2Index = (team2Index + 1) % len(nflTeams)
-            team2Logo = loadTeamLogo(nflTeams[team2Index])
+            team2Index = (team2Index + 1) % len(nflTeamsName)
+            team2Logo = loadTeamLogo(nflTeamsName[team2Index])
             if team2Index == team1Index:
-                team2Index = (team2Index + 1) % len(nflTeams)
-                team2Logo = loadTeamLogo(nflTeams[team2Index])
+                team2Index = (team2Index + 1) % len(nflTeamsName)
+                team2Logo = loadTeamLogo(nflTeamsName[team2Index])
 
         # Year Selector
         if leftArrowYear.collidepoint(event.pos):

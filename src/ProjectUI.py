@@ -4,6 +4,9 @@ import os
 pygame.init()
 
 """
+
+***** NO LONGER IN USE *******
+
 VARIABLES!!!!
 team1Index         # Left Team Index, 0 is Arizona, 1 is Atlanta, etc.
 team2Index         # Right Team Index

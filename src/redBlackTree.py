@@ -1,4 +1,7 @@
+#learned implementation from https://www.geeksforgeeks.org/red-black-tree-in-python/
 class RedBlackTree:
+
+    #class representing each node in the red-black tree with stats about each game
     class Node:
         def __init__(self, gameID_new, offense, defense, first_down_new, yards_new, rush_attempts_new, passes_new, incomplete_new, touchdown_new, sack_new, interception_new, fumble_new, color='red'):
             self.gameID = gameID_new
@@ -21,11 +24,13 @@ class RedBlackTree:
     def __init__(self):
         self.root = None
 
+    #function to get the grandparent of node
     def get_grandparent(self, node):
         if node.parent is None:
             return None
         return node.parent.parent
 
+    #function to get the uncle of a node
     def get_uncle(self, node):
         grandparent = self.get_grandparent(node)
         if grandparent is None:
@@ -34,6 +39,7 @@ class RedBlackTree:
             return grandparent.right
         return grandparent.left
 
+    #rotate_left similar to AVL tree
     def rotate_left(self, node):
         right_child = node.right
         node.right = right_child.left
@@ -49,6 +55,7 @@ class RedBlackTree:
         right_child.left = node
         node.parent = right_child
 
+    #rotate_right similar to AVL tree
     def rotate_right(self, node):
         left_child = node.left
         node.left = left_child.right
@@ -64,6 +71,7 @@ class RedBlackTree:
         left_child.right = node
         node.parent = left_child
 
+    #whether to rotate or color flip
     def decision(self, node):
         if node.parent is None:
             node.color = "black"
@@ -99,6 +107,7 @@ class RedBlackTree:
         else:
             self.rotate_left(grandparent)
 
+    #insert new node
     def insert(self, gameID, offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble):
         new_node = self.Node(gameID, offense, defense, first_down, yards, rush_attempts, passes, incomplete, touchdown, sack, interception, fumble)
         if not self.root:
@@ -135,11 +144,12 @@ class RedBlackTree:
 
         self.decision(new_node)
 
+    #search for a node with a gameID
     def search(self, gameID):
         current = self.root
         while current is not None:
             if gameID == current.gameID:
-                return [current.gameID, current.offense, current.defense, current.first_down, current.yards, current.rush_attempts, current.passes, current.incomplete,current.touchdown, current.sack, current.interception, current.fumble]
+                return [current.offense, current.defense, current.first_down, current.yards, current.rush_attempts, current.passes, current.incomplete,current.touchdown, current.sack, current.interception, current.fumble, current.gameID]
             elif gameID < current.gameID:
                 current = current.left
             else:

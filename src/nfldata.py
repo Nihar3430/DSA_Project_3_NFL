@@ -50,7 +50,7 @@ def update_id(gameID, offense_team):
     updated_gameID = gameID + team_num
     return updated_gameID
 
-
+#read data from CSV file and call red-black tree insert
 def redblackinsert(gameID1, gameID2):
     # Read and process the CSV data
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
@@ -83,6 +83,7 @@ def redblackinsert(gameID1, gameID2):
         elapsed_nano = (end - start) * 1e9
         return mock, mock2, elapsed_nano
 
+#read data from CSV file and call hashmap insert
 def hashmapinsert(gameID1, gameID2):
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)
@@ -115,6 +116,7 @@ def hashmapinsert(gameID1, gameID2):
         elapsed_nano = (end - start) * 1e9
         return mock, mock2, elapsed_nano
 
+#insert nodes into a dictionary so we can find the gameID with both the teams and game date as a keyd
 def dictinsert(off, denf, date):
     with open(file_path, mode='r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)
@@ -130,15 +132,47 @@ def dictinsert(off, denf, date):
         search_key = (off, denf, date)
 
         if search_key in game_data:
-            print(game_data[search_key])
             return game_data[search_key]
         else:
             print("Game ID not found.")
+            return 1
 
-if __name__ == "__main__": 
-    k = int(dictinsert("WAS", "DAL", "10/2/2022"))
-    m = int(dictinsert("DAL", "WAS", "10/2/2022"))
-    i, j, time = redblackinsert(k, m)
-    print(i)
-    print(j)
-    print(int(time))
+if __name__ == "__main__":
+    while True:
+        print("Welcome to the NFL Matchup Statistics Visualizer by The Krewe")
+        print("This tool allows you to see the statistics of both teams of the past games they played from 2021, 2022, or 2023")
+        print("Select two NFL teams by using their abbreviations below and a enter the date they played\n")
+
+
+        print("Arizona Cardinals = ARI\nAtlanta Falcons = ATL\nBaltimore Ravens = BAL\nBuffalo Bills = BUF\nCarolina Panthers = CAR\nChicago Bears = CHI\nCincinnati Bengals = CIN\nCleveland Browns = CLE\nDallas Cowboys = DAL\nDenver Broncos = DEN\nDetroit Lions = DET\nGreen Bay Packers = GB\nHouston Texans = HOU\nIndianapolis Colts = IND\nJacksonville Jaguars = JAX\nKansas City Chiefs = KC\nLas Vegas Raiders = LV\nLos Angeles Chargers = LAC\nLos Angeles Rams = LA\nMiami Dolphins = MIA\nMinnesota Vikings = MIN\nNew England Patriots = NE\nNew Orleans Saints = NO\nNew York Giants = NYG\nNew York Jets = NYJ\nPhiladelphia Eagles = PHI\nPittsburgh Steelers = PIT\nSan Francisco 49ers = SF\nSeattle Seahawks = SEA\nTampa Bay Bucs = TB\nTennessee Titans = TEN\nWashington Commanders = WAS\n\n")
+
+        team_one = input("Enter the abbreviation for Team One: ")
+        team_two = input("Enter the abbreviation for Team Two: ")
+        date = input("Enter the date of playing in the format \"Month, Day, Year\" Example: 10/2/2022: ")
+
+        k = int(dictinsert(team_one, team_two, date))
+        m = int(dictinsert(team_two, team_one, date))
+
+        print("\nNext choose whether you want to load the data from a red-black tree or hashmap.\nEnter r for red-black tree or h for hashmap:")
+        data_structure = input()
+        if data_structure == "r":
+            i, j, time_taken = redblackinsert(k, m)
+        if data_structure == "h":
+            i, j, time_taken = redblackinsert(k, m)
+
+        print(f"\n\n{team_one} Stats")
+        print(f"Total Offensive Yards: {i[3]}\nTotal Rush Attempts: {i[4]}\nTotal Pass Attempts: {i[5]}\nTotal Incompletions: {i[6]}\nTotal Touchdowns: {i[7]}\nTotal Sacks: {i[8]}\nTotal Interceptions: {i[9]}\nTotal Fumbles: {i[10]}")
+
+        print(f"\n{team_two} Stats")
+        print(f"Total Offensive Yards: {j[3]}\nTotal Rush Attempts: {j[4]}\nTotal Pass Attempts: {j[5]}\nTotal Incompletions: {j[6]}\nTotal Touchdowns: {j[7]}\nTotal Sacks: {j[8]}\nTotal Interceptions: {j[9]}\nTotal Fumbles: {j[10]}")
+
+
+        if data_structure == "r":
+            print(f"\nTime taken to load data from red-black tree: {int(time_taken)} nanoseconds")
+        if data_structure == "h":
+            print(f"\nTime taken to load data from hashmap: {int(time_taken)} nanoseconds")
+
+        decision = input("\nEnter \"q\" to quit or any other character to continue and selct another game: ")
+
+        if decision == "q":
+            break
